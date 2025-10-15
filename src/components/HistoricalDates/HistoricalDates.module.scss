@@ -21,10 +21,21 @@ $color-border: #eee;
     font-weight: 700;
     font-size: 56px;
     line-height: 120%;
-    border-left: 5px solid $color-blue;
-    padding-left: 15px;
+    padding-left: 75px;
     margin-bottom: 30px;
     color: $color-dark-text;
+    position: relative;
+    white-space: pre-wrap;
+    &:before{
+      width: 5px;
+      height: 120px;
+      background: linear-gradient(#e66465, #9198e5);
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translate(-51%,-50%);
+    }
   }
 }
 
@@ -240,9 +251,13 @@ $color-border: #eee;
   }
 }
 /////
+
 .container{
+  padding-top: 170px;
   width: 100%;
+  position: relative;
   max-width: 1440px;
-  border-inline: 1px solid #42567A;
+  border-inline: 1px solid #E5E5E5;
   margin-inline: 320px 160px;
+
 }
