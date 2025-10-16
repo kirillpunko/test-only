@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import { configureStore } from "@reduxjs/toolkit";
-import { Provider } from "react-redux";
 import TimelineReducer from "../lib/TimeLineSlice";
+import {configureStore} from "@reduxjs/toolkit";
+import {Provider} from "react-redux";
 
 const store = configureStore({
   reducer: {

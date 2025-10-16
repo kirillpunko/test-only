@@ -19,12 +19,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "resolve": {
-      "extensions": [".ts", ".tsx"],
-    }
+    "jsx": "react-jsx"
   },
   "include": [
     "src"
-  ],
+  ]
 }

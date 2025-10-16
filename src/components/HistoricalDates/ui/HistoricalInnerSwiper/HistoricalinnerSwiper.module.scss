@@ -1,0 +1,66 @@
+.innerSwiperContainer {
+  position: relative;
+  width: 100%;
+  padding: 40px 60px;
+  display: flex;
+  align-items: center;
+  color: rgba(56, 119, 238, 1);
+  .swiper {
+    width: 100%;
+    overflow: visible;
+  }
+
+  .slide {
+    width: auto !important;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .year {
+    font-size: 24px;
+    font-weight: 700;
+    color: #3a54d1;
+  }
+
+  .text {
+    font-size: 16px;
+    color: #333;
+    max-width: 300px;
+  }
+
+  .navButtonPrev,
+  .navButtonNext {
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid #c5c5c5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    cursor: pointer;
+    transition: opacity 0.3s ease, border-color 0.3s ease;
+
+    &:hover {
+      border-color: #3a54d1;
+    }
+
+    &.disabled {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+  }
+
+  .navButtonPrev {
+    left: 0;
+  }
+
+  .navButtonNext {
+    right: 0;
+  }
+}
