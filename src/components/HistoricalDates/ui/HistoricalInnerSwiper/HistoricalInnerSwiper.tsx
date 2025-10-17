@@ -4,6 +4,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import styles from "./HistoricalinnerSwiper.module.scss";
 import { ReactComponent as ArrowIcon } from "../../../../assets/arrow.svg";
+import {useCheckWindowSize} from "../../../../utils/useCheckWindowSize";
 
 interface EventItem {
   id: number;
@@ -16,19 +17,19 @@ interface InnerSwiperProps {
 }
 
 export const HistoricalInnerSwiper = ({ events }: InnerSwiperProps) => {
+  const {isWindowWidthLower, isWindowHeightLower} = useCheckWindowSize();
   return (
     <div className={styles.innerSwiperContainer}>
       <button id={"prevInnerBtn"} className={styles.navButtonPrev}>
         <ArrowIcon />
       </button>
-      <button id={"nextInnerBtn"} className={styles.navButtonNext} style={{ transform: "rotate(180deg)" }}>
-        <ArrowIcon />
+      <button id={"nextInnerBtn"} className={styles.navButtonNext} style={{transform: "rotate(180deg)"}}>
+        <ArrowIcon/>
       </button>
-
       <Swiper
         modules={[FreeMode, Navigation]}
         freeMode={true}
-        spaceBetween={80}
+        spaceBetween={!(isWindowWidthLower(780) || isWindowHeightLower(890))?80: 5}
         slidesPerView={"auto"}
         grabCursor={true}
         navigation={{

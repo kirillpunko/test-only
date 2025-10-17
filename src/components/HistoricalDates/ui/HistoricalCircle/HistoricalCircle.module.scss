@@ -6,7 +6,9 @@
   background: rgba(49, 101, 199, 0.1);
   top: 50%;
   left: 50%;
-
+  @media (max-width: 780px) or (max-height: 890px)  {
+    display: none;
+  }
 }
 .circle{
   z-index: 10;
@@ -21,6 +23,9 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  @media (max-width: 780px) or (max-height: 890px)  {
+    display: none;
+  }
   &Btn{
     cursor: pointer;
     padding: 0;
@@ -52,6 +57,26 @@
     position: relative;
     margin-top: -89px;
     margin-bottom: 95px;
+    @media(max-width: 1050px){
+      border: none;
+      margin-top: -50px;
+      margin-bottom: 55px;
+    }
+    @media (max-width: 780px) or (max-height: 890px)  {
+      width: calc(100% - 40px);
+      height: 250px;
+      margin-top:0;
+      margin-inline: 20px;
+      border-bottom: 1px solid var(--color-gray);
+    }
+    @media(max-height: 810px)  {
+      height: 158px;
+    }
+    @media(max-height: 730px)  {
+      margin-bottom: 20px;
+
+    }
+
     &:before{
       @include circleLines;
       transform: translate(-50%, -50%);
@@ -111,6 +136,15 @@
   font-size: 200px;
   line-height: 160px;
   font-weight: bold;
+  @media (max-width: 1200px) {
+    font-size: 130px;
+  }
+  @media (max-width: 780px) or (max-height: 890px)  {
+    font-size: 100px;
+  }
+  @media (max-width: 610px) {
+    font-size: 56px;
+  }
 }
 .yearsBlock{
   display: flex;
@@ -124,9 +158,16 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  @media (max-width: 460px) {
+    gap: 32px;
+  }
   &Start{
     @include yearsNums;
     color: var(--color-iris);
+    @media (max-width: 610px) {
+      color: var(--color-blue-second);
+    }
+
   }
   &End{
     @include yearsNums;

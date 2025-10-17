@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useRef } from "react";
 import styles from "./HistoricalCircle.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { setActivePeriod } from "../../lib/TimeLineSlice";
-import { RootState } from "../../store/historicalDatesProvider";
 import gsap from "gsap";
+import {IRootState} from "../../store/historicalDatesProvider";
 
 type circleType = {
   label: string;
@@ -22,7 +22,7 @@ const ROTATION_DURATION = 0.8;
 
 const HistoricalCircle = ({ circles, startYear, endYear, onSelectCircle }: CirclesType) => {
   const dispatch = useDispatch();
-  const activePeriod = useSelector((state: RootState) => state.timeline.activePeriod);
+  const activePeriod = useSelector((state:IRootState) => state.timeline.activePeriod);
   const circleRef = useRef<HTMLDivElement>(null);
   const currentRotationDegRef = useRef<number>(0);
   const startYearRef = useRef<HTMLDivElement>(null);

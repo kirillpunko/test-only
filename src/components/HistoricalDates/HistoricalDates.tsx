@@ -4,21 +4,23 @@ import { FreeMode, Navigation, Pagination } from "swiper/modules";
 import styles from "./HistoricalDates.module.scss";
 import text from "../../assets/locales/ru.json";
 import HistoricalCircle from "./ui/HistoricalCircle/HistoricalCircle";
-import { RootState } from "./store/historicalDatesProvider";
+import { IRootState } from "./store/historicalDatesProvider";
 import { useDispatch, useSelector } from "react-redux";
 import { useRef, useState } from "react";
 import { ReactComponent as ArrowIcon } from "../../assets/arrow.svg";
 import { HistoricalInnerSwiper } from "./ui/HistoricalInnerSwiper/HistoricalInnerSwiper";
 import gsap from "gsap";
 import { setActivePeriod } from "./lib/TimeLineSlice";
+import {useCheckWindowSize} from "../../utils/useCheckWindowSize";
 
 const ru = text.historicalDates;
 
 const HistoricalDates = () => {
-  const activePeriod = useSelector((state: RootState) => state.timeline.activePeriod);
+  const activePeriod = useSelector((state: IRootState) => state.timeline.activePeriod);
   const swiperRef = useRef<any>(null);
   const fadeRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
+  const {isWindowWidthLower, isWindowHeightLower} = useCheckWindowSize();
 
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(timelineSegments.length);
@@ -55,6 +57,7 @@ const HistoricalDates = () => {
 
     dispatch(setActivePeriod(newPeriod.id));
     animateSlideChange(targetIndex);
+    setCurrent(targetIndex + 1);
   };
 
   return (
@@ -76,15 +79,10 @@ const HistoricalDates = () => {
               swiperRef.current = swiper;
               setTotal(swiper.slides.length);
             }}
-            onSlideChange={(swiper: { activeIndex: number }) => {
-              setCurrent(swiper.activeIndex + 1);
-              const newPeriod = timelineSegments[swiper.activeIndex];
-              dispatch(setActivePeriod(newPeriod.id));
-            }}
             slidesPerView={1}
             cssMode={true}
             freeMode={true}
-            modules={[Pagination, Navigation, FreeMode]}
+            modules={[Navigation, FreeMode]}
             className={"my-swiper"}
           >
             {timelineSegments.map((segment) => (
@@ -94,11 +92,25 @@ const HistoricalDates = () => {
             ))}
           </Swiper>
         </div>
+        {(isWindowWidthLower(780) || isWindowHeightLower(890)) &&
+            <div className={styles.paginationDots}>
+              {timelineSegments.map((_, index) => (
+                <span
+                  key={_.id}
+                  className={`${styles.dot} ${current === index + 1 ? styles.activeDot : ""}`}
+                  onClick={() => {
+                    dispatch(setActivePeriod(_.id));
+                    animateSlideChange(_.slideIndex);
+                    setCurrent(index + 1);
+                  }}
+                />
+              ))}
+            </div>
+        }
         <div className={styles.navigationPanel}>
           <div className={styles.pagination}>
             {String(current).padStart(2, "0")}/{String(total).padStart(2, "0")}
           </div>
-
           <div className={styles.buttons}>
             <button className={styles.navBtn} onClick={() => handleSlide("prev")} disabled={current === 1}>
               <ArrowIcon />
