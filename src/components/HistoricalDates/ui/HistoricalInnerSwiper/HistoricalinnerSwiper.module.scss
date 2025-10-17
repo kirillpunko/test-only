@@ -1,10 +1,9 @@
 .innerSwiperContainer {
   position: relative;
   width: 100%;
-  padding: 40px 60px;
+  padding-inline: 90px;
   display: flex;
   align-items: center;
-  color: rgba(56, 119, 238, 1);
   .swiper {
     width: 100%;
     overflow: visible;
@@ -19,48 +18,50 @@
   }
 
   .year {
-    font-size: 24px;
-    font-weight: 700;
-    color: #3a54d1;
+    font-size: 25px;
+    font-family: "Bebas Neue", sans-serif;
+    color: var(--color-blue-second);
+    line-height: 30px;
+    margin-bottom: 15px;
   }
 
   .text {
-    font-size: 16px;
-    color: #333;
-    max-width: 300px;
+    font-size: 20px;
+    line-height: 30px;
+    max-width: 370px;
   }
 
   .navButtonPrev,
   .navButtonNext {
     position: absolute;
-    top: 50%;
     z-index: 10;
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: 1px solid #c5c5c5;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
+    background: var(--color-white);
     cursor: pointer;
-    transition: opacity 0.3s ease, border-color 0.3s ease;
-
-    &:hover {
-      border-color: #3a54d1;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 0 15px 0 rgba(56, 119, 238, 0.1);
+    color: var(--color-blue-second);
+    &.swiper-button-disabled{
+      opacity: 0;
     }
 
-    &.disabled {
-      opacity: 0.3;
-      pointer-events: none;
-    }
   }
 
   .navButtonPrev {
-    left: 0;
+    left: 22px;
   }
 
   .navButtonNext {
-    right: 0;
+    right: 22px;
   }
+}
+:global(.swiper-button-disabled) {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }

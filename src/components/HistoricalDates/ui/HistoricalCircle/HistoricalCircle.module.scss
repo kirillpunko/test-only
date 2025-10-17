@@ -31,16 +31,19 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    border: 1px solid #42567A;
-    background-color: #42567A;
+    border: 1px solid var(--text-color);
+    background-color: var(--text-color);
     font-size: 20px;
     line-height: 30px;
     transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-color 0.3s ease !important;
     will-change: width, height;
     &:hover{
-      background-color: #E5E5E5;
+      background-color: var(--color-bg);
       width: 56px;
       height: 56px;
+      & + .circleNum {
+        opacity: 1;
+      }
     }
   }
   &Container{
@@ -66,7 +69,11 @@
     opacity: 0;
     transform-origin: center center;
     transform: rotate(calc(-1 * #{'var(--rotationDeg, 0deg)'}));
-    &:hover, .active{
+    color: var(--text-color);
+    &.active {
+      opacity: 1;
+    }
+    &:hover {
       opacity: 1;
     }
   }
@@ -75,6 +82,15 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: all .3s ease;
+    .circleTextContainer:hover & {
+      opacity: 1;
+    }
+
+    .circleTextContainer.active & {
+      opacity: 1;
+    }
   }
   &Title{
     font-size: 20px;
@@ -84,6 +100,11 @@
     left: calc(100% + 20px);
     transform: translate(0, -50%);
     opacity: 0;
+    display: none;
+    .circleTextContainer.active & {
+      opacity: 1;
+      display: block;
+    }
   }
 }
 @mixin yearsNums{
@@ -105,18 +126,15 @@
   transform: translate(-50%, -50%);
   &Start{
     @include yearsNums;
-    color: var(--text-color-iris);
+    color: var(--color-iris);
   }
   &End{
     @include yearsNums;
-    color: var(--text-color-fuschia);
+    color: var(--color-fuschia);
   }
 }
-.active{
-  opacity: 1;
-}
 .activeBtn{
-  background-color: #E5E5E5;
+  background-color: var(--color-bg);
   width: 56px;
   height: 56px;
 }

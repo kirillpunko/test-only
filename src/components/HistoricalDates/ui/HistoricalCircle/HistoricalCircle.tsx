@@ -7,17 +7,20 @@ import gsap from "gsap";
 
 type circleType = {
   label: string;
+  slideIndex: number;
   id: number;
 };
 type CirclesType = {
   circles: circleType[];
   startYear: number;
   endYear: number;
+  onSelectCircle: (index: number) => void;
 };
 
 const circleRadius = 530 / 2;
+const ROTATION_DURATION = 0.8;
 
-const HistoricalCircle = ({ circles, startYear, endYear }: CirclesType) => {
+const HistoricalCircle = ({ circles, startYear, endYear, onSelectCircle }: CirclesType) => {
   const dispatch = useDispatch();
   const activePeriod = useSelector((state: RootState) => state.timeline.activePeriod);
   const circleRef = useRef<HTMLDivElement>(null);
@@ -39,6 +42,14 @@ const HistoricalCircle = ({ circles, startYear, endYear }: CirclesType) => {
     el.style.setProperty("--rotationDeg", `0deg`);
   }, []);
 
+  const normalizeToNearest = (current: number, target: number): number => {
+    let result = target;
+    while (result - current > 180) result -= 360;
+    while (current - result > 180) result += 360;
+    return result;
+  };
+
+  /*CIRCLE & TITLE*/
   useEffect(() => {
     const el = circleRef.current;
     if (!el || activeIndex < 0 || circles.length === 0) return;
@@ -48,13 +59,6 @@ const HistoricalCircle = ({ circles, startYear, endYear }: CirclesType) => {
     const desiredAngleRad = -Math.PI / 3;
     const targetRotationRad = desiredAngleRad - activeAngleRad;
     const targetRotationDeg = (targetRotationRad * 180) / Math.PI;
-
-    const normalizeToNearest = (current: number, target: number): number => {
-      let result = target;
-      while (result - current > 180) result -= 360;
-      while (current - result > 180) result += 360;
-      return result;
-    };
 
     const current = currentRotationDegRef.current;
     const nearestTarget = normalizeToNearest(current, targetRotationDeg);
@@ -66,7 +70,7 @@ const HistoricalCircle = ({ circles, startYear, endYear }: CirclesType) => {
 
     gsap.to(el, {
       rotation: nearestTarget,
-      duration: 0.6,
+      duration: ROTATION_DURATION,
       ease: "power2.inOut",
       onUpdate: () => {
         currentRotationDegRef.current = gsap.getProperty(el, "rotation") as number;
@@ -75,9 +79,7 @@ const HistoricalCircle = ({ circles, startYear, endYear }: CirclesType) => {
       onComplete: () => {
         currentRotationDegRef.current = nearestTarget;
         el.style.setProperty("--rotationDeg", `${nearestTarget}deg`);
-        const activeEl = document.querySelector(
-          `.${styles.circleBtn}.${styles.activeBtn} .${styles.circleTitle}`,
-        );
+        const activeEl = document.querySelector(`.${styles.circleBtn}.${styles.activeBtn} .${styles.circleTitle}`);
         if (activeEl) {
           gsap.to(activeEl, {
             opacity: 1,
@@ -89,6 +91,7 @@ const HistoricalCircle = ({ circles, startYear, endYear }: CirclesType) => {
     });
   }, [activeIndex, circles.length]);
 
+  /*YEARS*/
   useEffect(() => {
     const startEl = startYearRef.current;
     const endEl = endYearRef.current;
@@ -97,7 +100,7 @@ const HistoricalCircle = ({ circles, startYear, endYear }: CirclesType) => {
       const obj = { val: from } as { val: number };
       gsap.to(obj, {
         val: startYear,
-        duration: 0.6,
+        duration: ROTATION_DURATION,
         ease: "power1.out",
         onUpdate: () => {
           startEl.textContent = `${Math.round(obj.val)}`;
@@ -109,7 +112,7 @@ const HistoricalCircle = ({ circles, startYear, endYear }: CirclesType) => {
       const obj = { val: from } as { val: number };
       gsap.to(obj, {
         val: endYear,
-        duration: 0.6,
+        duration: ROTATION_DURATION,
         ease: "power1.out",
         onUpdate: () => {
           endEl.textContent = `${Math.round(obj.val)}`;
@@ -120,8 +123,9 @@ const HistoricalCircle = ({ circles, startYear, endYear }: CirclesType) => {
     prevEndYearRef.current = endYear;
   }, [startYear, endYear]);
 
-  const circleClickHandler = (id: number) => {
+  const circleClickHandler = (id: number, slideIndex: number) => {
     dispatch(setActivePeriod(id));
+    onSelectCircle(slideIndex);
   };
 
   return (
@@ -137,17 +141,15 @@ const HistoricalCircle = ({ circles, startYear, endYear }: CirclesType) => {
               className={`${styles.circleBtn} ${activePeriod?.id === circle.id ? styles.activeBtn : ""}`}
               key={circle.id}
               onClick={() => {
-                circleClickHandler(circle.id);
+                circleClickHandler(circle.id, circle.slideIndex);
               }}
               style={{ left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)`, transform: "translate(-50%, -50%)" }}
             >
-              <div
-                className={`${styles.circleTextContainer} ${activePeriod?.id === circle.id ? styles.active : ""}`}
-              >
-                <div className={styles.circleNum}>{circle.id}</div>
-                <div
-                  className={`${styles.circleTitle}`}
-                >
+              <div className={`${styles.circleTextContainer} ${activePeriod?.id === circle.id ? styles.active : ""}`}>
+                <div className={`${styles.circleNum} ${activePeriod?.id === circle.id ? styles.active : ""}`}>
+                  {circle.id}
+                </div>
+                <div className={`${styles.circleTitle} ${activePeriod?.id === circle.id ? styles.active : ""}`}>
                   {circle.label}
                 </div>
               </div>
@@ -156,8 +158,12 @@ const HistoricalCircle = ({ circles, startYear, endYear }: CirclesType) => {
         })}
       </div>
       <div className={styles.yearsBlock}>
-        <div className={styles.yearsBlockStart} ref={startYearRef}>{startYear}</div>
-        <div className={styles.yearsBlockEnd} ref={endYearRef}>{endYear}</div>
+        <div className={styles.yearsBlockStart} ref={startYearRef}>
+          {startYear}
+        </div>
+        <div className={styles.yearsBlockEnd} ref={endYearRef}>
+          {endYear}
+        </div>
       </div>
     </div>
   );

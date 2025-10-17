@@ -1,8 +1,12 @@
 html{
   --text-color: #42567A;
-  --text-color-iris: #5D5FEF;
-  --text-color-fuschia: #EF5DA8;
-  --text-color-blue: #3877EE;
+  --color-iris: #5D5FEF;
+  --color-fuschia: #EF5DA8;
+  --color-blue: #1976D2;
+  --color-blue-second: #3877EE;
+  --color-bg: #F4F5F9;
+  --color-purple-second:#5D5FEF;
+  --color-white: #FFFFFF;
 }
 
 body {
@@ -13,13 +17,7 @@ body {
   font-weight: 400;
   font-style: normal;
   color: var(--text-color);
-  background-color: #E5E5E5;
-}
-
-.bebas-neue-regular {
-  font-family: "Bebas Neue", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+  background-color: var(--color-bg);
 }
 
 *,

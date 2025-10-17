@@ -1,35 +1,15 @@
-$color-blue: #1976D2;
-$color-pink: #FF4081;
-$color-dark-text: #333;
-$color-light-text: #888;
-$color-bg: #fff;
-$color-border: #eee;
-
-.historical-timeline {
-  font-family: Arial, sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px;
-  background-color: $color-bg;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  position: relative;
-}
-
 .timeline {
   &Title{
     font-weight: 700;
     font-size: 56px;
     line-height: 120%;
     padding-left: 75px;
-    margin-bottom: 30px;
-    color: $color-dark-text;
     position: relative;
     white-space: pre-wrap;
     &:before{
       width: 5px;
       height: 120px;
-      background: linear-gradient($color-blue, $color-pink);
+      background: linear-gradient(var(--color-blue),var(--color-fuschia));
       content: '';
       position: absolute;
       left: 0;
@@ -39,220 +19,8 @@ $color-border: #eee;
   }
 }
 
-// ----- Секция Визуализации (Круг и Годы) -----
-.timeline__visual-area {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 40px;
-}
-
-.timeline__circle-container {
-  position: relative;
-  // Размер контейнера определяется радиусом в TS файле
-  width: 300px; // 2 * RADIUS
-  height: 300px; // 2 * RADIUS
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.timeline__circle-rotator {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border: 1px dashed $color-border; // Внешняя окружность
-  border-radius: 50%;
-}
-
-.timeline__dot {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background-color: $color-light-text;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  top: 50%;
-  left: 50%;
-  margin-left: -6px;
-  margin-top: -6px;
-
-  &--active {
-    background-color: $color-dark-text;
-  }
-
-  // Индикатор активной точки (больший круг)
-  .timeline__dot-indicator {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 20px;
-    height: 20px;
-    border: 2px solid $color-dark-text;
-    border-radius: 50%;
-  }
-}
-
-.timeline__years {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  font-size: 4rem; // Большой размер чисел
-  font-weight: 700;
-  white-space: nowrap; // Предотвращение переноса строк
-
-  .timeline__year {
-    // Начальный год - синий
-    &--start {
-      color: $color-blue;
-    }
-    // Конечный год - розовый
-    &--end {
-      color: $color-pink;
-    }
-    &:first-child {
-      margin-right: 20px;
-    }
-  }
-}
-
-// Метка и индекс сегмента над кругом
-.timeline__segment-info {
-  position: absolute;
-  top: 40px;
-  right: 40px;
-  display: flex;
-  align-items: center;
-}
-
-.timeline__segment-index {
-  font-size: 1.5rem;
-  font-weight: 300;
-  color: $color-light-text;
-  margin-right: 15px;
-}
-
-.timeline__segment-label {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: $color-dark-text;
-}
-
-// ----- Стрелки переключения сегментов -----
-.timeline__segment-controls {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-
-  button {
-    background: none;
-    border: 1px solid $color-border;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    color: $color-dark-text;
-    font-weight: bold;
-    transition: background-color 0.2s, color 0.2s;
-
-    &:hover {
-      background-color: $color-blue;
-      color: $color-bg;
-    }
-  }
-}
-
-// ----- Секция Слайдера (Swiper) -----
-.timeline__swiper-wrapper {
-  position: relative;
-  padding: 0 40px; // Отступ для кастомных стрелок
-}
-
-.timeline-swiper {
-  width: 100%;
-  padding-bottom: 40px; // Место для пагинации Swiper
-}
-
-.timeline-swiper__slide {
-  height: auto;
-}
-
-.event-card {
-  padding: 20px;
-  border-top: 5px solid $color-blue;
-  height: 100%; // Гарантирует одинаковую высоту
-  display: flex;
-  flex-direction: column;
-
-  .event-card__year {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: $color-pink;
-    margin-bottom: 10px;
-  }
-
-  .event-card__description {
-    font-size: 0.9rem;
-    line-height: 1.4;
-    color: $color-dark-text;
-  }
-}
-
-// Кастомная навигация Swiper (стрелки)
-.timeline__swiper-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  pointer-events: none; // Позволяет кликать сквозь контейнер
-
-  button {
-    pointer-events: all; // Снова активируем кнопки
-    background: $color-bg;
-    border: 1px solid $color-border;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    color: $color-dark-text;
-    z-index: 10;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-
-    &:hover {
-      background-color: $color-pink;
-      color: $color-bg;
-    }
-  }
-
-  .timeline__swiper-prev {
-    margin-left: -40px;
-  }
-
-  .timeline__swiper-next {
-    margin-right: -40px;
-  }
-}
-
-// Кастомизация пагинации Swiper (если нужна)
-.swiper-pagination {
-  bottom: 0 !important;
-  .swiper-pagination-bullet {
-    background-color: $color-light-text;
-    opacity: 0.5;
-    &.swiper-pagination-bullet-active {
-      background-color: $color-pink;
-      opacity: 1;
-    }
-  }
-}
-/////
-
 .container{
+  overflow: hidden;
   padding-top: 170px;
   width: 100%;
   min-height: 100%;
@@ -265,7 +33,6 @@ $color-border: #eee;
 .timelineSwiper{
   &Container{
     width: 100%;
-    height: 135px;
     position: relative;
   }
 }
@@ -282,30 +49,29 @@ $color-border: #eee;
 
 .pagination {
   font-size: 14px;
-  color: #5a6474;
   letter-spacing: 0.05em;
 }
 
 .buttons {
   display: flex;
-  gap: 0.75rem;
+  gap: 20px;
 }
 
 .navBtn {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 1px solid rgba(66, 86, 122, 0.5);
+  border: 1px solid var(--text-color);
   background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(66, 86, 122, 1);
+  color: var(--text-color);
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
-    background: #eef1f6;
+    background: var(--color-white);
   }
 
   &:disabled {

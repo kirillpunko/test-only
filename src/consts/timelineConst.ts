@@ -6,6 +6,7 @@ export const timelineSegments: TimeSegment[] = [
     startYear: 1987,
     endYear: 1991,
     label: "Кино",
+    slideIndex: 0,
     events: [
       { id: 11111, year: 1987, description: "«Хищник» / Predator, США (реж. Джон Мактирнан)" },
       {
@@ -23,6 +24,7 @@ export const timelineSegments: TimeSegment[] = [
     startYear: 1992,
     endYear: 1997,
     label: "Литература",
+    slideIndex: 1,
     events: [
       {
         id: 11121,
@@ -40,6 +42,7 @@ export const timelineSegments: TimeSegment[] = [
     startYear: 1999,
     endYear: 2004,
     label: "Театр",
+    slideIndex: 2,
     events: [
       {
         id: 11131,
@@ -60,6 +63,7 @@ export const timelineSegments: TimeSegment[] = [
     startYear: 2015,
     endYear: 2022,
     label: "Наука",
+    slideIndex: 3,
     events: [
       {
         id: 11141,
@@ -91,6 +95,7 @@ export const timelineSegments: TimeSegment[] = [
     startYear: 2022,
     endYear: 2025,
     label: "Спорт",
+    slideIndex: 4,
     events: [
       { id: 11111, year: 1987, description: "«Хищник» / Predator, США (реж. Джон Мактирнан)" },
       {
@@ -101,6 +106,38 @@ export const timelineSegments: TimeSegment[] = [
       { id: 11113, year: 1989, description: "«Назад в будущее 2» / Back To The Future 2, США (реж. Роберт Земекис)" },
       { id: 11114, year: 1990, description: "«Крепкий орешек 2» / Die Hard 2, США (реж. Ренни Харлин)" },
       { id: 11115, year: 1991, description: "«Семейка Аддамс» / The Addams Family, США, (реж. Барри Зонненфельд)" },
+    ],
+  },
+  {
+    id: 6,
+    startYear: 2025,
+    endYear: 2040,
+    label: "Киберспорт",
+    slideIndex: 5,
+    events: [
+      {
+        id: 11141,
+        year: 2015,
+        description: "13 сентября — частное солнечное затмение, видимое в Южной Африке и части Антарктиды",
+      },
+      {
+        id: 11142,
+        year: 2016,
+        description:
+          "Телескоп «Хаббл» обнаружил самую удаленную из всех обнаруженных галактик, получившую обозначение GN-z11",
+      },
+      {
+        id: 11143,
+        year: 2017,
+        description: "Компания Tesla официально представила первый в мире электрический грузовик Tesla Semi",
+      },
+      {
+        id: 11144,
+        year: 2018,
+        description: "Старт космического аппарата Solar Probe Plus, предназначенного для изучения Солнца",
+      },
+      { id: 11145, year: 2019, description: "Google объявил о создании 53-кубитного квантового компьютера." },
+      { id: 11146, year: 2020, description: "Корабль Crew Dragon вернулся на Землю из первого пилотируемого полёта" },
     ],
   },
 ];

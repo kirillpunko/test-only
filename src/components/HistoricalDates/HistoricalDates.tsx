@@ -1,72 +1,115 @@
 import { timelineSegments } from "../../consts/timelineConst";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {FreeMode, Navigation, Pagination} from "swiper/modules";
+import { FreeMode, Navigation, Pagination } from "swiper/modules";
 import styles from "./HistoricalDates.module.scss";
 import text from "../../assets/locales/ru.json";
 import HistoricalCircle from "./ui/HistoricalCircle/HistoricalCircle";
 import { RootState } from "./store/historicalDatesProvider";
-import { useSelector } from "react-redux";
-import {useRef, useState} from "react";
-import {ReactComponent as ArrowIcon} from "../../assets/arrow.svg";
-import {HistoricalInnerSwiper} from "./ui/HistoricalInnerSwiper/HistoricalInnerSwiper";
+import { useDispatch, useSelector } from "react-redux";
+import { useRef, useState } from "react";
+import { ReactComponent as ArrowIcon } from "../../assets/arrow.svg";
+import { HistoricalInnerSwiper } from "./ui/HistoricalInnerSwiper/HistoricalInnerSwiper";
+import gsap from "gsap";
+import { setActivePeriod } from "./lib/TimeLineSlice";
 
 const ru = text.historicalDates;
 
 const HistoricalDates = () => {
   const activePeriod = useSelector((state: RootState) => state.timeline.activePeriod);
   const swiperRef = useRef<any>(null);
+  const fadeRef = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
 
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(timelineSegments.length);
+
+  const animateSlideChange = (targetIndex: number) => {
+    const container = fadeRef.current;
+    const swiper = swiperRef.current;
+    if (!container || !swiper) return;
+
+    const tl = gsap.timeline({
+      defaults: { ease: "power2.inOut", duration: 0.8 },
+    });
+
+    tl.to(container, {
+      opacity: 0,
+      onComplete: () => {
+        swiper.slideTo(targetIndex, 0);
+        gsap.to(container, {
+          opacity: 1,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      },
+    });
+  };
+
+  const handleSlide = (direction: "next" | "prev") => {
+    const swiper = swiperRef.current;
+    if (!swiper) return;
+
+    const targetIndex = direction === "next" ? swiper.activeIndex + 1 : swiper.activeIndex - 1;
+    if (targetIndex < 0 || targetIndex >= timelineSegments.length) return;
+    const newPeriod = timelineSegments[targetIndex];
+
+    dispatch(setActivePeriod(newPeriod.id));
+    animateSlideChange(targetIndex);
+  };
 
   return (
     <div className={styles.container}>
       <h2 className={styles.timelineTitle}>{ru.title}</h2>
       <HistoricalCircle
-        circles={timelineSegments.map(({label, id}) => ({label, id}))}
+        circles={timelineSegments.map(({ label, id, slideIndex }) => ({ label, id, slideIndex }))}
         startYear={activePeriod?.startYear}
         endYear={activePeriod?.endYear}
+        onSelectCircle={animateSlideChange}
       />
 
-
       <div className={styles.timelineSwiperContainer}>
-        <Swiper
-          onSwiper={(swiper: { slides: string | any[]; }) => {
-            swiperRef.current = swiper;
-            setTotal(swiper.slides.length);
-          }}
-          onSlideChange={(swiper: { activeIndex: number; }) => setCurrent(swiper.activeIndex + 1)}
-          slidesPerView={1}
-          cssMode={true}
-          modules={[Pagination, Navigation]}
-          className={"my-swiper"}
-        >
-          {timelineSegments.map((segment, index) => (
-            <SwiperSlide key={segment.id}>
-              <HistoricalInnerSwiper events={segment.events}/>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <div ref={fadeRef}>
+          <Swiper
+            speed={0}
+            initialSlide={0}
+            onSwiper={(swiper: { slides: string | any[] }) => {
+              swiperRef.current = swiper;
+              setTotal(swiper.slides.length);
+            }}
+            onSlideChange={(swiper: { activeIndex: number }) => {
+              setCurrent(swiper.activeIndex + 1);
+              const newPeriod = timelineSegments[swiper.activeIndex];
+              dispatch(setActivePeriod(newPeriod.id));
+            }}
+            slidesPerView={1}
+            cssMode={true}
+            freeMode={true}
+            modules={[Pagination, Navigation, FreeMode]}
+            className={"my-swiper"}
+          >
+            {timelineSegments.map((segment) => (
+              <SwiperSlide key={segment.id}>
+                <HistoricalInnerSwiper events={segment.events} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
         <div className={styles.navigationPanel}>
           <div className={styles.pagination}>
             {String(current).padStart(2, "0")}/{String(total).padStart(2, "0")}
           </div>
 
           <div className={styles.buttons}>
-            <button
-              className={styles.navBtn}
-              onClick={() => swiperRef.current?.slidePrev()}
-              disabled={current === 1}
-            >
-              <ArrowIcon/>
+            <button className={styles.navBtn} onClick={() => handleSlide("prev")} disabled={current === 1}>
+              <ArrowIcon />
             </button>
             <button
-              className={styles.navBtn }
-              onClick={() => swiperRef.current?.slideNext()}
+              className={styles.navBtn}
+              onClick={() => handleSlide("next")}
               disabled={current === total}
-              style={{transform: "rotate(180deg)"}}
+              style={{ transform: "rotate(180deg)" }}
             >
-              <ArrowIcon/>
+              <ArrowIcon />
             </button>
           </div>
         </div>
