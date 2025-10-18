@@ -11,7 +11,7 @@ import { ReactComponent as ArrowIcon } from "../../assets/arrow.svg";
 import { HistoricalInnerSwiper } from "./ui/HistoricalInnerSwiper/HistoricalInnerSwiper";
 import gsap from "gsap";
 import { setActivePeriod } from "./lib/TimeLineSlice";
-import {useCheckWindowSize} from "../../utils/useCheckWindowSize";
+import { useCheckWindowSize } from "../../utils/useCheckWindowSize";
 
 const ru = text.historicalDates;
 
@@ -20,7 +20,7 @@ const HistoricalDates = () => {
   const swiperRef = useRef<any>(null);
   const fadeRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
-  const {isWindowWidthLower, isWindowHeightLower} = useCheckWindowSize();
+  const { isWindowWidthLower, isWindowHeightLower } = useCheckWindowSize();
 
   const [current, setCurrent] = useState(1);
   const [total, setTotal] = useState(timelineSegments.length);
@@ -31,20 +31,18 @@ const HistoricalDates = () => {
     if (!container || !swiper) return;
 
     const tl = gsap.timeline({
-      defaults: { ease: "power2.inOut", duration: 0.8 },
+      defaults: { ease: "power2.inOut", duration: 0.5 },
     });
 
-    tl.to(container, {
-      opacity: 0,
-      onComplete: () => {
-        swiper.slideTo(targetIndex, 0);
-        gsap.to(container, {
-          opacity: 1,
-          duration: 0.4,
-          ease: "power2.out",
-        });
-      },
+    tl.to(container, { opacity: 0, duration: 0.45 });
+
+    tl.add(() => {
+      swiper.slideTo(targetIndex, 0);
+      gsap.set(container, { y: 15 });
     });
+
+    tl.to(container, { opacity: 1, y: 0, duration: 0.6 });
+    setCurrent(targetIndex + 1);
   };
 
   const handleSlide = (direction: "next" | "prev") => {
@@ -57,18 +55,19 @@ const HistoricalDates = () => {
 
     dispatch(setActivePeriod(newPeriod.id));
     animateSlideChange(targetIndex);
-    setCurrent(targetIndex + 1);
   };
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.timelineTitle}>{ru.title}</h2>
-      <HistoricalCircle
-        circles={timelineSegments.map(({ label, id, slideIndex }) => ({ label, id, slideIndex }))}
-        startYear={activePeriod?.startYear}
-        endYear={activePeriod?.endYear}
-        onSelectCircle={animateSlideChange}
-      />
+      <div>
+        <h2 className={styles.timelineTitle}>{ru.title}</h2>
+        <HistoricalCircle
+          circles={timelineSegments.map(({ label, id, slideIndex }) => ({ label, id, slideIndex }))}
+          startYear={activePeriod?.startYear}
+          endYear={activePeriod?.endYear}
+          onSelectCircle={animateSlideChange}
+        />
+      </div>
 
       <div className={styles.timelineSwiperContainer}>
         <div ref={fadeRef}>
@@ -87,26 +86,28 @@ const HistoricalDates = () => {
           >
             {timelineSegments.map((segment) => (
               <SwiperSlide key={segment.id}>
+                {(isWindowWidthLower(780) || isWindowHeightLower(890)) && (
+                  <div className={styles.innerSwiperTitle}>{segment.label}</div>
+                )}
                 <HistoricalInnerSwiper events={segment.events} />
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
-        {(isWindowWidthLower(780) || isWindowHeightLower(890)) &&
-            <div className={styles.paginationDots}>
-              {timelineSegments.map((_, index) => (
-                <span
-                  key={_.id}
-                  className={`${styles.dot} ${current === index + 1 ? styles.activeDot : ""}`}
-                  onClick={() => {
-                    dispatch(setActivePeriod(_.id));
-                    animateSlideChange(_.slideIndex);
-                    setCurrent(index + 1);
-                  }}
-                />
-              ))}
-            </div>
-        }
+        {(isWindowWidthLower(780) || isWindowHeightLower(890)) && (
+          <div className={styles.paginationDots}>
+            {timelineSegments.map((_, index) => (
+              <span
+                key={_.id}
+                className={`${styles.dot} ${current === index + 1 ? styles.activeDot : ""}`}
+                onClick={() => {
+                  dispatch(setActivePeriod(_.id));
+                  animateSlideChange(_.slideIndex);
+                }}
+              />
+            ))}
+          </div>
+        )}
         <div className={styles.navigationPanel}>
           <div className={styles.pagination}>
             {String(current).padStart(2, "0")}/{String(total).padStart(2, "0")}

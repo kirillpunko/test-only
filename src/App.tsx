@@ -9,7 +9,7 @@ import TimeLineBlock from "./pages/TimeLineBlock/TimeLineBlock";
 function App() {
   return (
     <div className={styles.container}>
-      <TimeLineBlock/>
+      <TimeLineBlock />
     </div>
   );
 }

@@ -7,7 +7,7 @@ interface TimelineState {
 }
 
 const initialState: TimelineState = {
-  activePeriod: timelineSegments[0]||{
+  activePeriod: timelineSegments[0] || {
     id: 0,
     startYear: 0,
     endYear: 0,

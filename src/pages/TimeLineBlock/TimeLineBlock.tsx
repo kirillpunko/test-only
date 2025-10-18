@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import HistoricalDates from "../../components/HistoricalDates";
 import HistoricalDatesProvider from "../../components/HistoricalDates/store/historicalDatesProvider";
 

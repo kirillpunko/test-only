@@ -1,10 +1,10 @@
 .innerSwiperContainer {
   position: relative;
   width: 100%;
-  padding-inline: 90px;
+  padding-inline: 80px;
   display: flex;
   align-items: center;
-  @media (max-width: 780px) or (max-height: 890px)  {
+  @media (max-width: 780px) or (max-height: 890px) {
     padding-inline: 0;
   }
   .swiper {
@@ -17,8 +17,10 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-left: 20px;
     max-width: 370px;
+    @media (max-width: 780px) or (max-height: 890px) {
+      margin-left: 20px;
+    }
     @media (max-height: 670px) {
       max-width: 180px;
     }
@@ -68,10 +70,9 @@
     @media (max-width: 1024px) or (max-height: 890px) {
       display: none;
     }
-    &.swiper-button-disabled{
+    &.swiper-button-disabled {
       opacity: 0;
     }
-
   }
   .navButtonPrev {
     left: 22px;
